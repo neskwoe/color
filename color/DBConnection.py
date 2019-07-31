@@ -43,11 +43,18 @@ class MySQL():
 
         field = ''
 
+        value = ''
+
         for f in req:
 
-            field = field + ',' + f[0]
+                field = field + ',' + f
 
-        sql = 'insert into ' + table_name + '(' + field[1:len(field)] + ') values(' + values + ')'
+
+        for v in values:
+
+                value = value + v
+
+        sql = 'insert into ' + table_name + '(' + field + ') values(' + str(values) + ')'
 
         self.cursor.execute(sql)
 
@@ -67,7 +74,7 @@ class MySQL():
 
         for row in self.cursor.fetchall():
 
-            resultlist.append(row)
+            resultlist.append(' '.join('{1}'.format(key, val) for key, val in sorted(row.items())))
 
         return resultlist
 
