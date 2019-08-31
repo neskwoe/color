@@ -1,14 +1,21 @@
-from DBConnection import MySQL
+from DBConnection import SqlConn
 import datetime as ds
 import time
 
 ts = time.time()
 
-sqlcursor = MySQL('Btest')
+sqlcursor = SqlConn('Btest')
 
-sqlcursor.sql_insert('Twitter_Content', [ds.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S'),
-                                         'test2', 'Bone Ou', 1, 1, 1])
+fields = sqlcursor.field_retrieve('Twitter_Content')
+values = [ds.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S'),
+                                         'test2', 'Bone Ou', 1, 1, 1]
 
-result = sqlcursor.select_data('select * from Twitter_Content')
+sqlinput = dict(zip(fields, values))
 
-print(result)
+sqlstatement = sqlcursor.get_i_sql('Twitter_Content', sqlinput)
+
+sqlcursor.execute(sqlstatement)
+
+sqlcursor.commit()
+
+
